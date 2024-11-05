@@ -18,7 +18,6 @@ RED = (255, 0, 0)
 LIGHTRED = (255, 182, 193)
 GREEN = (0, 255, 0)
 
-
 # Fonts
 title_font = pygame.font.Font(None, 74)
 button_font = pygame.font.Font(None, 50)
@@ -30,13 +29,17 @@ def draw_text(text, font, color, surface, xaxis, yaxis):
     textrect.center = (xaxis, yaxis)
     surface.blit(textobj, textrect)
 
-
+# main game loop
 while True:
+    
     # Fill background color white
     screen.fill(LIGHTRED)
 
     # Draw title
-    draw_text("Jungle Speed", title_font, BLACK, screen, WIDTH // 2, HEIGHT // 4)
+    draw_text("Authentication", title_font, BLACK, screen, WIDTH // 2, HEIGHT // 8)
+
+    # TEST CASE
+    # draw_text("Hello", title_font, BLUE, screen, 350, 100)
 
     # Draw buttons
     login_button = pygame.Rect(WIDTH // 4, HEIGHT // 2 + 100, WIDTH // 2, 50)
@@ -45,6 +48,7 @@ while True:
     pygame.draw.rect(screen, RED, signup_button)
     draw_text("Sign up", button_font, WHITE, screen, WIDTH // 2, HEIGHT // 2 + 25)
     draw_text("Log in", button_font, WHITE, screen, WIDTH // 2, HEIGHT // 2 + 125)
+
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
