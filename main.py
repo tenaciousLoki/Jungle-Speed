@@ -29,7 +29,7 @@ def draw_text(text, font, color, surface, xaxis, yaxis):
     textrect.center = (xaxis, yaxis)
     surface.blit(textobj, textrect)
 
-# main game loop
+# Main game loop
 while True:
     
     # Fill background color white
@@ -46,18 +46,24 @@ while True:
     signup_button = pygame.Rect(WIDTH // 4, HEIGHT // 2, WIDTH // 2, 50)
     pygame.draw.rect(screen, RED, login_button)
     pygame.draw.rect(screen, RED, signup_button)
+    # Draw text
     draw_text("Sign up", button_font, WHITE, screen, WIDTH // 2, HEIGHT // 2 + 25)
     draw_text("Log in", button_font, WHITE, screen, WIDTH // 2, HEIGHT // 2 + 125)
 
-
+    # Event handler
     for event in pygame.event.get():
+        # Handles the quit event
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
+        # If mouse has been clicked and within either of the buttons - then print
         if event.type == pygame.MOUSEBUTTONDOWN:
             if signup_button.collidepoint(event.pos):
+                # Test case
                 print("Sign up button clicked!")
             if login_button.collidepoint(event.pos):
+                # Test case
                 print("Log in button clicked!")
+    # updates the entire screen with the latest drawn content                
     pygame.display.flip()
 
