@@ -44,11 +44,15 @@ while True:
     # Draw buttons
     login_button = pygame.Rect(WIDTH // 4, HEIGHT // 2 + 100, WIDTH // 2, 50)
     signup_button = pygame.Rect(WIDTH // 4, HEIGHT // 2, WIDTH // 2, 50)
+    guest_button = pygame.Rect(WIDTH // 4, HEIGHT // 2 - 100, WIDTH // 2, 50)
     pygame.draw.rect(screen, RED, login_button)
     pygame.draw.rect(screen, RED, signup_button)
+    pygame.draw.rect(screen, RED, guest_button)
+    
     # Draw text
     draw_text("Sign up", button_font, WHITE, screen, WIDTH // 2, HEIGHT // 2 + 25)
     draw_text("Log in", button_font, WHITE, screen, WIDTH // 2, HEIGHT // 2 + 125)
+    draw_text("Guest", button_font, WHITE, screen, WIDTH // 2, HEIGHT // 2 - 75)
 
     # Event handler
     for event in pygame.event.get():
@@ -64,6 +68,9 @@ while True:
             if login_button.collidepoint(event.pos):
                 # Test case
                 print("Log in button clicked!")
+            if guest_button.collidepoint(event.pos):
+                # Test case
+                print("Guest button clicked!")
     # updates the entire screen with the latest drawn content                
     pygame.display.flip()
 
