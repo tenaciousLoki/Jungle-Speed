@@ -42,16 +42,16 @@ while True:
     # draw_text("Hello", title_font, BLUE, screen, 350, 100)
 
     # Draw buttons
-    login_button = pygame.Rect(WIDTH // 4, HEIGHT // 2 + 100, WIDTH // 2, 50)
+    signin_button = pygame.Rect(WIDTH // 4, HEIGHT // 2 + 100, WIDTH // 2, 50)
     signup_button = pygame.Rect(WIDTH // 4, HEIGHT // 2, WIDTH // 2, 50)
     guest_button = pygame.Rect(WIDTH // 4, HEIGHT // 2 - 100, WIDTH // 2, 50)
-    pygame.draw.rect(screen, RED, login_button)
+    pygame.draw.rect(screen, RED, signin_button)
     pygame.draw.rect(screen, RED, signup_button)
     pygame.draw.rect(screen, RED, guest_button)
     
     # Draw text
     draw_text("Sign up", button_font, WHITE, screen, WIDTH // 2, HEIGHT // 2 + 25)
-    draw_text("Log in", button_font, WHITE, screen, WIDTH // 2, HEIGHT // 2 + 125)
+    draw_text("Sign in", button_font, WHITE, screen, WIDTH // 2, HEIGHT // 2 + 125)
     draw_text("Guest", button_font, WHITE, screen, WIDTH // 2, HEIGHT // 2 - 75)
 
     # Event handler
@@ -65,7 +65,7 @@ while True:
             if signup_button.collidepoint(event.pos):
                 # Test case
                 print("Sign up button clicked!")
-            if login_button.collidepoint(event.pos):
+            if signin_button.collidepoint(event.pos):
                 # Test case
                 print("Log in button clicked!")
             if guest_button.collidepoint(event.pos):
