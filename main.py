@@ -1,6 +1,8 @@
 import pygame
 import sys
 import random
+from screens import draw_authentication_screen
+from screens import draw_mainMenu_screen
 
 # Initialize Pygame
 pygame.init()
@@ -22,55 +24,47 @@ GREEN = (0, 255, 0)
 title_font = pygame.font.Font(None, 74)
 button_font = pygame.font.Font(None, 50)
 
-# Function for drawing text visible to the user
-def draw_text(text, font, color, surface, xaxis, yaxis):
-    textobj = font.render(text, True, color)
-    textrect = textobj.get_rect()
-    textrect.center = (xaxis, yaxis)
-    surface.blit(textobj, textrect)
-
 # Main game loop
+
+# important variable used to determine current screen state
+current_screen = "authentication"
+
 while True:
-    
-    # Fill background color white
-    screen.fill(LIGHTRED)
-
-    # Draw title
-    draw_text("Authentication", title_font, BLACK, screen, WIDTH // 2, HEIGHT // 8)
-
-    # TEST CASE
-    # draw_text("Hello", title_font, BLUE, screen, 350, 100)
-
-    # Draw buttons
-    signin_button = pygame.Rect(WIDTH // 4, HEIGHT // 2 + 100, WIDTH // 2, 50)
-    signup_button = pygame.Rect(WIDTH // 4, HEIGHT // 2, WIDTH // 2, 50)
-    guest_button = pygame.Rect(WIDTH // 4, HEIGHT // 2 - 100, WIDTH // 2, 50)
-    pygame.draw.rect(screen, RED, signin_button)
-    pygame.draw.rect(screen, RED, signup_button)
-    pygame.draw.rect(screen, RED, guest_button)
-    
-    # Draw text
-    draw_text("Sign up", button_font, WHITE, screen, WIDTH // 2, HEIGHT // 2 + 25)
-    draw_text("Sign in", button_font, WHITE, screen, WIDTH // 2, HEIGHT // 2 + 125)
-    draw_text("Guest", button_font, WHITE, screen, WIDTH // 2, HEIGHT // 2 - 75)
-
     # Event handler
     for event in pygame.event.get():
-        # Handles the quit event
+        # Quits program if user clicks the cross button
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
-        # If mouse has been clicked and within either of the buttons - then print
+        # When mouse has been clicked, the next conditional statements are checked
         if event.type == pygame.MOUSEBUTTONDOWN:
-            if signup_button.collidepoint(event.pos):
-                # Test case
-                print("Sign up button clicked!")
-            if signin_button.collidepoint(event.pos):
-                # Test case
-                print("Log in button clicked!")
-            if guest_button.collidepoint(event.pos):
-                # Test case
-                print("Guest button clicked!")
-    # updates the entire screen with the latest drawn content                
-    pygame.display.flip()
+            # checks current screen
+            if current_screen == "authentication":
+                # draws authentication screen and the returned button details are assigned to the three buttons
+                signin_button, signup_button, skip_button = draw_authentication_screen(screen, title_font, button_font, WIDTH, HEIGHT, LIGHTRED, RED, WHITE, BLACK)
+                if signin_button.collidepoint(event.pos):
+                    # test case
+                    print("Sign in button clicked!") 
+                elif signup_button.collidepoint(event.pos):
+                    # test case
+                    print("Sign up button clicked!")
+                elif skip_button.collidepoint(event.pos):
+                    # current_screen updated so that next iteration actually drawns main menu screen
+                    current_screen = "skip"
+                    print("Skip button clicked!")
+            # checks if skip button is clicked, if so, draws main menu screen
+            elif current_screen == "skip":
+                # draws the main menu screen, using function and assigning returned values to the three buttons
+                play_button, options_button, back_button = draw_mainMenu_screen(screen, title_font, button_font, WIDTH, HEIGHT, LIGHTRED, RED, WHITE)
+                # when back button is clicked, the current_screen is simply updated to 'authentication' so next iteration draws the according screen
+                if back_button.collidepoint(event.pos):
+                    current_screen = "authentication"
 
+    screen.fill(LIGHTRED)
+    # draws the screen according to the current_screen variable so that the screen keepings running for the user
+    if current_screen == "authentication":
+        draw_authentication_screen(screen, title_font, button_font, WIDTH, HEIGHT, LIGHTRED, RED, WHITE, BLACK)
+    elif current_screen == "skip":
+        draw_mainMenu_screen(screen, title_font, button_font, WIDTH, HEIGHT, LIGHTRED, RED, WHITE)
+
+    pygame.display.flip()
