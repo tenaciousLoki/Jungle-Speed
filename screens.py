@@ -5,6 +5,7 @@ import os
 settingsIcon_image = pygame.transform.scale(pygame.image.load(r"img\icons\settings.png"), (50,50))
 backIcon_image = pygame.transform.scale(pygame.image.load(r"img\icons\back.png"), (50,50))
 crownIcon_image = pygame.transform.scale(pygame.image.load(r"img\icons\crown.png"), (100,100))
+infoIcon_image = pygame.transform.scale(pygame.image.load(r"img\icons\info.png"), (49,49))
 
 # function for drawing text visible to the user
 def draw_text(text, font, color, surface, xaxis, yaxis):
@@ -46,6 +47,7 @@ def draw_mainMenu_screen(screen, title_font, button_font, WIDTH, HEIGHT, LIGHTRE
     # draw buttons and their contents to main menu screen
     settings_button = screen.blit(settingsIcon_image, (740, 10))
     back_button = screen.blit(backIcon_image, (10,10))
+    info_button = screen.blit(infoIcon_image, (690,10))
     play_button = pygame.Rect(245, 400, WIDTH // 2.5, 75)
     pygame.draw.rect(screen, RED, play_button)
     draw_text("Play", pygame.font.Font(None, 55), WHITE, screen, 405, 440)
@@ -56,7 +58,7 @@ def draw_mainMenu_screen(screen, title_font, button_font, WIDTH, HEIGHT, LIGHTRE
 
     
 
-    return play_button, settings_button, back_button
+    return play_button, settings_button, back_button, info_button
 
 # draw game screen
 def draw_game_screen(screen, title_font, button_font, WIDTH, HEIGHT, LIGHTRED, RED, WHITE):
