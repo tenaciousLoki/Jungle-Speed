@@ -14,10 +14,19 @@ def draw_text(text, font, color, surface, xaxis, yaxis):
     textrect.center = (xaxis, yaxis)
     surface.blit(textobj, textrect)
 
+# color variables
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+BLUE = (0, 0, 255)
+RED = (255, 0, 0)
+LIGHTRED = (255, 182, 193)
+GREEN = (0, 255, 0)
+GREY = (200, 200, 200)
 
 # draw the authentication screen
 def draw_authentication_screen(screen, title_font, button_font, WIDTH, HEIGHT, LIGHTRED, RED, WHITE, BLACK):
-    screen.fill(LIGHTRED)
+    
+    # draw header
     draw_text("Authentication", title_font, BLACK, screen, WIDTH // 2, HEIGHT // 8)
     
     signup_button = pygame.Rect(WIDTH // 4, HEIGHT // 2 - 100, WIDTH // 2, 50) 
@@ -38,8 +47,6 @@ winScore = 50
 
 # draw the main menu screen
 def draw_mainMenu_screen(screen, title_font, button_font, WIDTH, HEIGHT, LIGHTRED, RED, WHITE):
-    # draw background colour 
-    screen.fill(LIGHTRED)
 
     # draw header
     draw_text("Main Menu", title_font, pygame.Color('black'), screen, WIDTH // 2, HEIGHT // 8)
@@ -56,11 +63,75 @@ def draw_mainMenu_screen(screen, title_font, button_font, WIDTH, HEIGHT, LIGHTRE
     screen.blit(crownIcon_image, (350, 122.5))
     draw_text(f"{winScore}", pygame.font.Font(None, 35), WHITE, screen, 400, 260)
 
-    
-
     return play_button, settings_button, back_button, info_button
 
-# draw game screen
-def draw_game_screen(screen, title_font, button_font, WIDTH, HEIGHT, LIGHTRED, RED, WHITE):
-    screen.fill(LIGHTRED)
+# text input class
+class textInput:
+    # x and y represent coordinates for positioning on a screen
+    def __init__(self, x, y, width, height, font):
+        # create a rectangle shape for the input field
+        self.rect = pygame.Rect(x, y, width, height)
+        # initial colour of input field
+        self.color = GREY 
+        # text within input field
+        self.text = "" 
+        # font used for input field text
+        self.font = font 
+        # rendered text surface
+        self.text_surface = self.font.render(self.text, True, BLACK) 
+        # checks to see if input box has been entered into
+        self.active = False
+    
+    def handle_event(self, event):
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if self.rect.collidepoint(event.pos):
+                # active state becomes true because input field has been clicked
+                self.active = True
+                self.color = BLACK
+            else:
+                # i.e. if the input field hasn't been clicked, active state remains false
+                self.active = False
+                self.color = GREY
+        # checks if the user has pressed a key on their keyboard
+        elif event.type == pygame.KEYDOWN:
+            # checks if the key was pressed while the input field is active
+            if self.active:
+                # checks if user has pressed the backspace key on their keyboard
+                if event.key == pygame.K_BACKSPACE:
+                    # removes the last character upon pressing backspace key
+                    self.text = self.text[:-1]
+                else: 
+                    # adds the typed character into the input field
+                    self.text += event.unicode
+                # render the updated text
+                self.text_surface = self.font.render(self.text, True, BLACK)
+   
+    def update(self):
+        width = max(200, self.text_surface.get_width() + 10)
+        self.rect.w = width
 
+    def draw(self, screen):
+        # draws the text
+        screen.blit(self.text_surface, (self.rect.x + 5, self.rect.y + 5)) 
+        # draws the input box rectangle
+        pygame.draw.rect(screen, self.color, self.rect, 2)
+
+# draw the setup screen
+def draw_setUp_screen(screen, title_font, button_font, WIDTH, HEIGHT, RED, WHITE):
+    draw_text("Setup", title_font, pygame.Color('black'), screen, WIDTH // 2, HEIGHT // 8)
+    # initialises two input fields using textInput class
+    #useroneName_inputfield = textInput(300, 200, 200, 40, button_font)
+    #usertwoName_inputfield = textInput(300, 300, 200, 40, button_font)
+    # submit button used for completion of assigning user names 
+    submit_button = pygame.Rect(350, 400, 100, 50)
+    # draws shape and text for the submit button
+    pygame.draw.rect(screen, RED, submit_button)
+    draw_text("Submit", button_font, WHITE, screen, 400, 425)
+   # textInput.draw(useroneName_inputfield, screen)
+    #textInput.draw(usertwoName_inputfield, screen)
+    back_button = screen.blit(backIcon_image, (10,10))
+
+    return submit_button, back_button
+
+def draw_game_screen(screen, title_font, button_font, WIDTH, HEIGHT, RED, WHITE):
+    draw_text("Jungle Speed", title_font, pygame.Color('black'), screen, WIDTH // 2, HEIGHT // 8)
