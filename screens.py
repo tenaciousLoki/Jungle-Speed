@@ -2,10 +2,47 @@ import pygame
 import os
 
 # loading images into pygame
+# buttons
 settingsIcon_image = pygame.transform.scale(pygame.image.load(r"img\icons\settings.png"), (50,50))
 backIcon_image = pygame.transform.scale(pygame.image.load(r"img\icons\back.png"), (50,50))
 crownIcon_image = pygame.transform.scale(pygame.image.load(r"img\icons\crown.png"), (100,100))
 infoIcon_image = pygame.transform.scale(pygame.image.load(r"img\icons\info.png"), (49,49))
+# game screen components
+totem_Image = pygame.transform.scale(pygame.image.load(r"img\totem.png"), (85,85))
+logo_Image = pygame.transform.scale(pygame.image.load(r"img\logo.png"), (85,85))
+hand_Image = pygame.transform.scale(pygame.image.load(r"img\hand.png"), (85,85))
+
+# loading all cards into pygame
+cards_Folder = r"img\cards"
+deck = []
+
+# for loop which loads the cards folder into the main program
+for card in os.listdir(cards_Folder):
+    # checks if file type is jpg
+    if card.endswith(".jpg"):
+        # holds the path of img within index 'card'
+        card_path = os.path.join(cards_Folder, card)
+        # uses individual card path to load into pygame
+        card_img = pygame.transform.scale(pygame.image.load(card_path), (75, 112.5))
+        # now the card has been loaded, it is appended to a deck list for later use
+        deck.append(card_img)
+
+'''# test case to see if cards have been correctly stored
+pygame.init()
+WIDTH, HEIGHT = 600, 800
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+
+# counter
+count = 0
+while True:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+        for card in deck:
+            count += 50
+            screen.blit(card, (100 + count, 300))
+    pygame.display.flip()'''
+
 
 # function for drawing text visible to the user
 def draw_text(text, font, color, surface, xaxis, yaxis):
@@ -29,10 +66,12 @@ def draw_authentication_screen(screen, title_font, button_font, WIDTH, HEIGHT, L
     # draw header
     draw_text("Authentication", title_font, BLACK, screen, WIDTH // 2, HEIGHT // 8)
     
+    # draws shapes of buttons
     signup_button = pygame.Rect(WIDTH // 4, HEIGHT // 2 - 100, WIDTH // 2, 50) 
     signin_button = pygame.Rect(WIDTH // 4, HEIGHT // 2, WIDTH // 2, 50) 
     skip_button = pygame.Rect(WIDTH // 4, HEIGHT // 2 + 100, WIDTH // 2, 50) 
 
+    # draws the button and text
     pygame.draw.rect(screen, RED, signup_button) 
     pygame.draw.rect(screen, RED, signin_button) 
     pygame.draw.rect(screen, RED, skip_button) 
@@ -134,4 +173,8 @@ def draw_setUp_screen(screen, title_font, button_font, WIDTH, HEIGHT, RED, WHITE
     return submit_button, back_button
 
 def draw_game_screen(screen, title_font, button_font, WIDTH, HEIGHT, RED, WHITE):
-    draw_text("Jungle Speed", title_font, pygame.Color('black'), screen, WIDTH // 2, HEIGHT // 8)
+    screen.blit(logo_Image, (400, 260))
+    screen.blit(totem_Image, (400, 260))
+    screen.blit(hand_Image, (180, 200))
+    screen.blit(pygame.transform.rotate(hand_Image, 180), (400, 50))
+    
