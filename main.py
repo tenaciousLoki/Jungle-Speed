@@ -8,7 +8,7 @@ import screens
 pygame.init()
 
 # screen dimensions
-WIDTH, HEIGHT = 800, 600
+WIDTH, HEIGHT = 960, 720
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Jungle Speed")
 
@@ -43,6 +43,9 @@ while True:
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
+        for card in screens.deck:
+            screens.count += 50
+            screen.blit(card, (100 + screens.count, 300 + screens.count))
         # when mouse has been clicked, the next conditional statements are checked
         if event.type == pygame.MOUSEBUTTONDOWN:
             # checks current screen

@@ -8,9 +8,10 @@ backIcon_image = pygame.transform.scale(pygame.image.load(r"img\icons\back.png")
 crownIcon_image = pygame.transform.scale(pygame.image.load(r"img\icons\crown.png"), (100,100))
 infoIcon_image = pygame.transform.scale(pygame.image.load(r"img\icons\info.png"), (49,49))
 # game screen components
-totem_Image = pygame.transform.scale(pygame.image.load(r"img\totem.png"), (85,85))
-logo_Image = pygame.transform.scale(pygame.image.load(r"img\logo.png"), (85,85))
-hand_Image = pygame.transform.scale(pygame.image.load(r"img\hand.png"), (85,85))
+totem_Image = pygame.transform.scale(pygame.image.load(r"img\totem.png"), (204, 204))
+logo_Image = pygame.transform.scale(pygame.image.load(r"img\logo.png"), (170,170))
+hand_Image = pygame.transform.scale(pygame.image.load(r"img\hand.png"), (310,310))
+discardPile_image = pygame.transform.scale(pygame.image.load(r"img\discard_Pile.png"), (210.9375, 316.40625))
 
 # loading all cards into pygame
 cards_Folder = r"img\cards"
@@ -23,16 +24,17 @@ for card in os.listdir(cards_Folder):
         # holds the path of img within index 'card'
         card_path = os.path.join(cards_Folder, card)
         # uses individual card path to load into pygame
-        card_img = pygame.transform.scale(pygame.image.load(card_path), (75, 112.5))
+        card_img = pygame.transform.scale(pygame.image.load(card_path), (37.5, 56.25))
         # now the card has been loaded, it is appended to a deck list for later use
         deck.append(card_img)
 
-'''# test case to see if cards have been correctly stored
+# test case to see if cards have been correctly stored
 pygame.init()
 WIDTH, HEIGHT = 600, 800
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
-# counter
+count = 0
+'''# counter
 count = 0
 while True:
     for event in pygame.event.get():
@@ -40,9 +42,9 @@ while True:
             pygame.quit()
         for card in deck:
             count += 50
-            screen.blit(card, (100 + count, 300))
-    pygame.display.flip()'''
-
+            screen.blit(card, (100 + count, 300 + count))
+    pygame.display.flip()
+'''
 
 # function for drawing text visible to the user
 def draw_text(text, font, color, surface, xaxis, yaxis):
@@ -173,8 +175,14 @@ def draw_setUp_screen(screen, title_font, button_font, WIDTH, HEIGHT, RED, WHITE
     return submit_button, back_button
 
 def draw_game_screen(screen, title_font, button_font, WIDTH, HEIGHT, RED, WHITE):
-    screen.blit(logo_Image, (400, 260))
-    screen.blit(totem_Image, (400, 260))
-    screen.blit(hand_Image, (180, 200))
-    screen.blit(pygame.transform.rotate(hand_Image, 180), (400, 50))
+    #screen.blit(logo_Image, (WIDTH // 2, HEIGHT // 2))
+    # draws the totem, which is used in duels
+    screen.blit(totem_Image, (WIDTH // 2 - 100, HEIGHT // 2 - 90))
+    # draws a hand, this is used to show the outcomes of duels 
+    screen.blit(hand_Image, (WIDTH - 780, HEIGHT - 280))
+    # draws the same hand but upside down, for player 2
+    screen.blit(pygame.transform.rotate(hand_Image, 180), (WIDTH - 390, HEIGHT - 630))
+    # cards which will be in use during game
+    screen.blit(pygame.transform.rotate(discardPile_image, 90), (WIDTH // 2 - 120, HEIGHT // 2 - 30))
+    screen.blit(deck[0], (WIDTH //2 , HEIGHT // 2))
     
