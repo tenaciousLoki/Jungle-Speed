@@ -25,7 +25,7 @@ GREY = (200, 200, 200)
 title_font = pygame.font.Font(None, 74)
 button_font = pygame.font.Font(None, 50)
 small_font = pygame.font.Font(None, 24)
-countdown_font = pygame.font.SysFont(None, 120)
+countdown_font = pygame.font.SysFont(None, 340)
 # change to timesnewroman which is nicer after NEA
 
 '''# back card
@@ -216,8 +216,8 @@ def draw_game_screen(screen, title_font, button_font, WIDTH, HEIGHT, RED, WHITE)
     # center the totem in the middle of the screen
     totem_x = WIDTH // 2 - totem_Image.get_width() // 2
     totem_y = HEIGHT // 2 - totem_Image.get_height() // 2
-    # test case
-    print(totem_x, totem_y)
+    '''# test case
+    print(totem_x, totem_y)'''
 
     screen.blit(totem_Image, (totem_x, totem_y))
     # place the first hand in the bottom right of the screen
@@ -262,11 +262,12 @@ def draw_game_screen(screen, title_font, button_font, WIDTH, HEIGHT, RED, WHITE)
     draw_text(f"{discardpile_total_Count}", small_font, WHITE, screen, 75, HEIGHT // 2 - 65)
 
 # variables for countdown display
-counter, text = 10, '10'
+counter, text = 5, '5'
 # initialises countdown
 clock = pygame.time.Clock()
 pygame.time.set_timer(pygame.USEREVENT, 1000)
-
+# boolean variable which determines whether countdown is closed or left running
+close_Countdown = False
 
 # main game loop
 while True:
@@ -341,11 +342,12 @@ while True:
         # countdown timer 
         if event.type == pygame.USEREVENT:
             if current_screen == "game":
-                if counter >= 1:
+                if counter > 1:
                     counter -= 1
                     text = str(counter)
                 else:
                     text = "Flip!"
+                
     clock.tick(60)
 
 
@@ -363,8 +365,12 @@ while True:
         usertwoName_inputfield.draw(screen)
     elif current_screen == "game":
         draw_game_screen(screen, title_font, button_font, WIDTH, HEIGHT, RED, WHITE)
-        if text != "Flip!":
-            screen.blit(countdown_font.render(text, True, (255, 255, 255)), (50, 300))
+        if close_Countdown != True:
+            screen.blit(countdown_font.render(text, True, (255, 255, 255)), (430, 240))
+        if text == "Flip!":
+            # consider adjusting speed later
+            close_Countdown = True
+
         # game logic here
 
     pygame.display.flip()
