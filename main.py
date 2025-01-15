@@ -2,6 +2,7 @@ import pygame
 import sys
 import random
 import os
+import time
 
 # initialize Pygame
 pygame.init()
@@ -24,6 +25,8 @@ GREY = (200, 200, 200)
 title_font = pygame.font.Font(None, 74)
 button_font = pygame.font.Font(None, 50)
 small_font = pygame.font.Font(None, 24)
+countdown_font = pygame.font.SysFont(None, 120)
+# change to timesnewroman which is nicer after NEA
 
 '''# back card
 back_Card = deck[0]
@@ -121,16 +124,16 @@ def draw_mainMenu_screen(screen, title_font, button_font, WIDTH, HEIGHT, LIGHTRE
     draw_text("Main Menu", title_font, pygame.Color('black'), screen, WIDTH // 2, HEIGHT // 8)
 
     # draw buttons and their contents to main menu screen
-    settings_button = screen.blit(settingsIcon_image, (740, 10))
-    back_button = screen.blit(backIcon_image, (10,10))
-    info_button = screen.blit(infoIcon_image, (690,10))
-    play_button = pygame.Rect(245, 400, WIDTH // 2.5, 75)
+    settings_button = screen.blit(settingsIcon_image, (WIDTH * 0.93, HEIGHT * 0.013888889))
+    back_button = screen.blit(backIcon_image, (10,10)) 
+    info_button = screen.blit(infoIcon_image, (WIDTH * 0.87, HEIGHT * 0.013888889))
+    play_button = pygame.Rect(WIDTH * 0.298, HEIGHT * 0.55555556, WIDTH // 2.5, HEIGHT * 0.10416667)
     pygame.draw.rect(screen, RED, play_button)
-    draw_text("Play", pygame.font.Font(None, 55), WHITE, screen, 405, 440)
+    draw_text("Play", pygame.font.Font(None, 55), WHITE, screen, WIDTH * 0.493, HEIGHT * 0.611111111)
 
     # draw crown image and its data
-    screen.blit(crownIcon_image, (350, 122.5))
-    draw_text(f"{winScore}", pygame.font.Font(None, 35), WHITE, screen, 400, 260)
+    screen.blit(crownIcon_image, (WIDTH * 0.44, HEIGHT * 0.18))
+    draw_text(f"{winScore}", pygame.font.Font(None, 35), WHITE, screen, WIDTH * 0.493, HEIGHT * 0.361)
 
     return play_button, settings_button, back_button, info_button
 
@@ -149,7 +152,7 @@ class textInput:
         # rendered text surface
         self.text_surface = self.font.render(self.text, True, BLACK) 
         # checks to see if input box has been entered into
-        self.active = False
+        self.active = True
     
     def handle_event(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -192,21 +195,30 @@ def draw_setUp_screen(screen, title_font, button_font, WIDTH, HEIGHT, RED, WHITE
     #useroneName_inputfield = textInput(300, 200, 200, 40, button_font)
     #usertwoName_inputfield = textInput(300, 300, 200, 40, button_font)
     # submit button used for completion of assigning user names 
-    submit_button = pygame.Rect(350, 400, 100, 50)
+    submit_button = pygame.Rect(WIDTH * 0.33, HEIGHT * 0.65, WIDTH * 0.35, 75)
     # draws shape and text for the submit button
     pygame.draw.rect(screen, RED, submit_button)
-    draw_text("Submit", button_font, WHITE, screen, 400, 425)
+    draw_text("Submit", button_font, WHITE, screen, WIDTH * 0.5, HEIGHT * 0.7)
    # textInput.draw(useroneName_inputfield, screen)
     #textInput.draw(usertwoName_inputfield, screen)
     back_button = screen.blit(backIcon_image, (10,10))
 
     return submit_button, back_button
 
+# game screen's necessary global variables
+nickName1 = "Player 1"
+nickName2 = "Player 2"
+player1_deck_Score = 0
+player2_deck_Score = 0
+discardpile_total_Count = 0
 # draws the game screen
 def draw_game_screen(screen, title_font, button_font, WIDTH, HEIGHT, RED, WHITE):
     # center the totem in the middle of the screen
     totem_x = WIDTH // 2 - totem_Image.get_width() // 2
     totem_y = HEIGHT // 2 - totem_Image.get_height() // 2
+    # test case
+    print(totem_x, totem_y)
+
     screen.blit(totem_Image, (totem_x, totem_y))
     # place the first hand in the bottom right of the screen
     hand1_x = WIDTH - hand_Image.get_width() - 600
@@ -232,27 +244,29 @@ def draw_game_screen(screen, title_font, button_font, WIDTH, HEIGHT, RED, WHITE)
     card2_x = discard1_x + 116.5
     card2_y = discard2_y - 90
     screen.blit(pygame.transform.rotate(back_Card2, 180), (card2_x, card2_y))
+    # place text beside player's decks and discard piles
+    # data for player 1
+    player1_Name = pygame.Rect(WIDTH * 0.25 - 85, -5, 120, 45)
+    pygame.draw.rect(screen, RED, player1_Name)
+    draw_text(f"{nickName1}", pygame.font.Font(None, 30), WHITE, screen, WIDTH * 0.25 - 30, 20)
+    draw_text("Score", small_font, WHITE, screen, card1_x - 50, card1_y + 30)
+    draw_text(f"{player1_deck_Score}", small_font, WHITE, screen, card1_x - 50, card1_y + 50)
+    # data for player 2
+    player2_Name = pygame.Rect(WIDTH * 0.75 - 25, HEIGHT - 40, 120, 45)
+    pygame.draw.rect(screen, RED, player2_Name)
+    draw_text(f"{nickName2}", pygame.font.Font(None, 30), WHITE, screen, WIDTH * 0.75 + 30, HEIGHT - 20)
+    draw_text("Score", small_font, WHITE, screen, card2_x - 50, card2_y + 30)
+    draw_text(f"{player2_deck_Score}", small_font, WHITE, screen, card2_x - 50, card2_y + 50)
+    # discard pile total count
+    draw_text("Discard Pile Total:", small_font, WHITE, screen, 80, HEIGHT // 2 - 85)
+    draw_text(f"{discardpile_total_Count}", small_font, WHITE, screen, 75, HEIGHT // 2 - 65)
 
-'''
-  # textIn# Define the new size for the card
-new_card_width = 100  # Desired width
-new_card_height = 150  # Desired height
-# Scale the card image
-scaled_card = pygame.transform.scale(deck[0], (new_card_width, new_card_height))
+# variables for countdown display
+counter, text = 10, '10'
+# initialises countdown
+clock = pygame.time.Clock()
+pygame.time.set_timer(pygame.USEREVENT, 1000)
 
-# Draw the scaled card
-screen.blit(scaled_card, (WIDTH // 2, HEIGHT // 2))'''
-
-
-# countdown initialising
-countdown_timer = 3  # Starting countdown value
-last_count_update = pygame.time.get_ticks()  # Tracks time of last update
-countdown_active = True  # Toggle to start the countdown
-
-# Draw countdown function
-def draw_countdown(screen, countdown, font, color, WIDTH, HEIGHT):
-    if countdown >= 0:
-        draw_text(str(countdown), font, color, screen, 20, 20)
 
 # main game loop
 while True:
@@ -275,15 +289,16 @@ while True:
                 # draws authentication screen and the returned button details are assigned to the three buttons
                 signin_button, signup_button, skip_button = draw_authentication_screen(screen, title_font, button_font, WIDTH, HEIGHT, LIGHTRED, RED, WHITE, BLACK)
                 if signin_button.collidepoint(event.pos):
-                    # test case
-                    print("Sign in button clicked!") 
+                    '''# test case
+                    print("Sign in button clicked!") '''
                 elif signup_button.collidepoint(event.pos):
-                    # test case
-                    print("Sign up button clicked!")
+                   ''' # test case
+                    print("Sign up button clicked!")'''
                 elif skip_button.collidepoint(event.pos):
                     # current_screen updated so that next iteration actually drawns main menu screen
                     current_screen = "mainMenu"
-                    print("Skip button clicked!")
+                    '''# test case
+                    print("Skip button clicked!")'''
             # checks if skip button is clicked, if so, draws main menu screen
             elif current_screen == "mainMenu":
                 # draws the main menu screen, using function and assigning returned values to the three buttons
@@ -304,11 +319,11 @@ while True:
                     # test case
                     print("Play button clicked!")
             elif current_screen == "setup":
-                useroneName_inputfield.handle_event(event)
-                usertwoName_inputfield.handle_event(event)
                 # assigns the returned variables from the function into the following variables
                 submit_button, back_button = draw_setUp_screen(
                 screen, title_font, button_font, WIDTH, HEIGHT, RED, WHITE)
+                useroneName_inputfield.handle_event(event)
+                usertwoName_inputfield.handle_event(event)
                 # handles user events for every input field
                 #for field in input_fields:
                   #  field.handle_event(event)
@@ -323,22 +338,15 @@ while True:
                     print("Back button clicked!")
             elif current_screen == "game":
                 draw_game_screen(screen, title_font, button_font, WIDTH, HEIGHT, RED, WHITE)
-                
-                # Countdown logic
-                if countdown_active:
-                    current_time = pygame.time.get_ticks()
-                    if current_time - last_count_update > 1000:  # Update every second
-                        countdown_timer -= 1
-                        last_count_update = current_time
-
-                    # Display countdown
-                    draw_countdown(screen, countdown_timer, title_font, RED, WIDTH, HEIGHT)
-
-                    # End countdown when it reaches 0
-                    if countdown_timer < 0:
-                        countdown_active = False
-                        print("Countdown finished! Start the game.")
-
+        # countdown timer 
+        if event.type == pygame.USEREVENT:
+            if current_screen == "game":
+                if counter >= 1:
+                    counter -= 1
+                    text = str(counter)
+                else:
+                    text = "Flip!"
+    clock.tick(60)
 
 
     screen.fill(LIGHTRED)
@@ -355,4 +363,8 @@ while True:
         usertwoName_inputfield.draw(screen)
     elif current_screen == "game":
         draw_game_screen(screen, title_font, button_font, WIDTH, HEIGHT, RED, WHITE)
+        if text != "Flip!":
+            screen.blit(countdown_font.render(text, True, (255, 255, 255)), (50, 300))
+        # game logic here
+
     pygame.display.flip()
