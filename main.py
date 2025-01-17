@@ -1,10 +1,11 @@
+# card images found here: https://github.com/marcllopis/JungleSpeed-match
 import pygame
 import sys
 import random
 import os
 import time
 
-# initialize Pygame
+# initialize pygame
 pygame.init()
 
 # screen dimensions
@@ -37,8 +38,7 @@ player1 = {
 
 }'''
 
-# variable used to determine current screen state
-current_screen = "authentication"
+
 
 # screens section
 
@@ -48,17 +48,22 @@ settingsIcon_image = pygame.transform.scale(pygame.image.load(r"img\icons\settin
 backIcon_image = pygame.transform.scale(pygame.image.load(r"img\icons\back.png"), (50,50))
 crownIcon_image = pygame.transform.scale(pygame.image.load(r"img\icons\crown.png"), (100,100))
 infoIcon_image = pygame.transform.scale(pygame.image.load(r"img\icons\info.png"), (49,49))
-# game screen components
+# match screen components
 totem_Image = pygame.transform.scale(pygame.image.load(r"img\totem.png"), (204, 204))
 logo_Image = pygame.transform.scale(pygame.image.load(r"img\logo.png"), (170,170))
 hand_Image = pygame.transform.scale(pygame.image.load(r"img\hand.png"), (310,310))
 defaultcard_Size = (210, 316)
 discardPile_image = pygame.transform.scale(pygame.image.load(r"img\discard_Pile.png"), (defaultcard_Size))
 
-# loading all cards into pygame
+# variables loading all cards into pygame
 cards_Folder = r"img\cards"
 deck = []
 
+# variable used for handling cards
+count = 0
+
+
+''' CODE FOR IMPORTING ACTUAL CARDS INTO PROGRAM - FOR LATER USE'''
 # for loop which loads the cards folder into the main program
 for card in os.listdir(cards_Folder):
     # checks if file type is jpg
@@ -72,19 +77,6 @@ for card in os.listdir(cards_Folder):
 back_Card1 = deck[0]
 back_Card2 = deck[0]
 
-
-count = 0
-'''# counter
-count = 0
-while True:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-        for card in deck:
-            count += 50
-            screen.blit(card, (100 + count, 300 + count))
-    pygame.display.flip()
-'''
 
 # function for drawing text visible to the user
 def draw_text(text, font, color, surface, xaxis, yaxis):
@@ -137,6 +129,8 @@ def draw_mainMenu_screen(screen, title_font, button_font, WIDTH, HEIGHT, LIGHTRE
 
     return play_button, settings_button, back_button, info_button
 
+
+'''CLASSES '''
 # text input class
 class textInput:
     # x and y represent coordinates for positioning on a screen
@@ -153,7 +147,7 @@ class textInput:
         self.text_surface = self.font.render(self.text, True, BLACK) 
         # checks to see if input box has been entered into
         self.active = True
-    
+    '''THERE IS SOMETHING WRONG WITH CONSTRUCTOR METHOD, TAKE A CLOSE LOOK WHEN YOU CAN'''
     def handle_event(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
             if self.rect.collidepoint(event.pos):
@@ -205,14 +199,47 @@ def draw_setUp_screen(screen, title_font, button_font, WIDTH, HEIGHT, RED, WHITE
 
     return submit_button, back_button
 
-# game screen's necessary global variables
+class player():
+    # constructor method
+    def __init__(self, name, deck, score):
+        self.__name = name
+        self.__deck = deck
+        self.__score = score
+    
+    # get methods
+    def getName(self):
+        return self.__name
+    def getDeck(self):
+        return self.__deck
+    def getScore(self):
+        return self.__score
+    # set methods 
+    def setName(self, newName):
+        self.__name = newName
+    def appendDeck(self, newData):
+        self.__deck.append(newData)
+    def popDeck(self, popData):
+        pass
+    def shuffleDeck(self, deck):
+        deck.random.shuffle()
+
+playerOne = player("Player1", ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20'], 0)
+playerTwo = player("Player2", ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20'], 0)
+
+# test cases
+
+
+
+# match screen's necessary global variables
 nickName1 = "Player 1"
 nickName2 = "Player 2"
 player1_deck_Score = 0
 player2_deck_Score = 0
 discardpile_total_Count = 0
-# draws the game screen
-def draw_game_screen(screen, title_font, button_font, WIDTH, HEIGHT, RED, WHITE):
+
+
+# draws the match screen
+def draw_match_screen(screen, title_font, button_font, WIDTH, HEIGHT, RED, WHITE):
     # center the totem in the middle of the screen
     totem_x = WIDTH // 2 - totem_Image.get_width() // 2
     totem_y = HEIGHT // 2 - totem_Image.get_height() // 2
@@ -247,7 +274,7 @@ def draw_game_screen(screen, title_font, button_font, WIDTH, HEIGHT, RED, WHITE)
     # place text beside player's decks and discard piles
     # data for player 1
     player1_Name = pygame.Rect(WIDTH * 0.25 - 85, -5, 120, 45)
-    pygame.draw.rect(screen, RED, player1_Name)
+    pygame.draw.rect(screen, RED, player.getName())
     draw_text(f"{nickName1}", pygame.font.Font(None, 30), WHITE, screen, WIDTH * 0.25 - 30, 20)
     draw_text("Score", small_font, WHITE, screen, card1_x - 50, card1_y + 30)
     draw_text(f"{player1_deck_Score}", small_font, WHITE, screen, card1_x - 50, card1_y + 50)
@@ -261,15 +288,30 @@ def draw_game_screen(screen, title_font, button_font, WIDTH, HEIGHT, RED, WHITE)
     draw_text("Discard Pile Total:", small_font, WHITE, screen, 80, HEIGHT // 2 - 85)
     draw_text(f"{discardpile_total_Count}", small_font, WHITE, screen, 75, HEIGHT // 2 - 65)
 
+def game():
+    player1 = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20']
+    player2 = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20']
+
+
+
+
+# variable used to determine current screen state
+current_screen = "authentication"
+
 # variables for countdown display
 counter, text = 5, '5'
+
 # initialises countdown
 clock = pygame.time.Clock()
 pygame.time.set_timer(pygame.USEREVENT, 1000)
+
 # boolean variable which determines whether countdown is closed or left running
 close_Countdown = False
 
-# main game loop
+# variables for game function
+# determines if a play (like a duel or normal flip) has finished (including completion of score allocation)
+play_End = True
+# main loop
 while True:
     # input fields from setup screen
     useroneName_inputfield = textInput(300, 200, 200, 40, button_font)
@@ -280,9 +322,11 @@ while True:
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
+        ''' WILL BE USED LATER: 
         for card in deck:
             count += 50
-            screen.blit(card, (100 + count, 300 + count))
+            screen.blit(card, (100 + count, 300 + count))'''
+
         # when mouse has been clicked, the next conditional statements are checked
         if event.type == pygame.MOUSEBUTTONDOWN:
             # checks current screen
@@ -326,32 +370,34 @@ while True:
                 useroneName_inputfield.handle_event(event)
                 usertwoName_inputfield.handle_event(event)
                 # handles user events for every input field
-                #for field in input_fields:
-                  #  field.handle_event(event)
+                ''' ADDRESS THIS LATER:
+                for field in input_fields:
+                    field.handle_event(event)'''
                 # checks if the submit button has been clicked
                 if submit_button.collidepoint(event.pos):
-                    current_screen = "game"
+                    current_screen = "match"
                     # test case
                     print("Submit button clicked!")
                 elif back_button.collidepoint(event.pos):
                     current_screen = "mainMenu"
                     # test case
                     print("Back button clicked!")
-            elif current_screen == "game":
-                draw_game_screen(screen, title_font, button_font, WIDTH, HEIGHT, RED, WHITE)
         # countdown timer 
-        if event.type == pygame.USEREVENT:
-            if current_screen == "game":
-                if counter > 1:
-                    counter -= 1
-                    text = str(counter)
-                else:
-                    text = "Flip!"
-                
+        if play_End == True:
+            if event.type == pygame.USEREVENT:
+                if current_screen == "match":
+                    if counter > 1:
+                        counter -= 1
+                        text = str(counter)
+                    else:
+                        text = "Flip!"
+                    
     clock.tick(60)
 
 
     screen.fill(LIGHTRED)
+    
+
     # draws the screen according to the current_screen variable so that the screen keeps running for the user
     if current_screen == "authentication":
         draw_authentication_screen(screen, title_font, button_font, WIDTH, HEIGHT, LIGHTRED, RED, WHITE, BLACK)
@@ -363,14 +409,16 @@ while True:
         usertwoName_inputfield.update()
         useroneName_inputfield.draw(screen)
         usertwoName_inputfield.draw(screen)
-    elif current_screen == "game":
-        draw_game_screen(screen, title_font, button_font, WIDTH, HEIGHT, RED, WHITE)
+    elif current_screen == "match":
+        draw_match_screen(screen, title_font, button_font, WIDTH, HEIGHT, RED, WHITE)
         if close_Countdown != True:
-            screen.blit(countdown_font.render(text, True, (255, 255, 255)), (430, 240))
+            screen.blit(countdown_font.render(text, True, (255, 255, 255)), ((WIDTH // 2 - totem_Image.get_width() // 2) + 52, (HEIGHT // 2 - totem_Image.get_height() // 2) + 18))
+            if text == "Flip!":
+                # after the end of the countdown, the game
+                game()
         if text == "Flip!":
             # consider adjusting speed later
             close_Countdown = True
 
-        # game logic here
-
+        
     pygame.display.flip()
