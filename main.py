@@ -221,12 +221,29 @@ class player():
     def popDeck(self, popData):
         pass
     def shuffleDeck(self, deck):
-        deck.random.shuffle()
+        random.shuffle(deck)
 
-playerOne = player("Player1", ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20'], 0)
-playerTwo = player("Player2", ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20'], 0)
+# instantiated player objects
+playerOne = player("Player1", 
+['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20'], 0)
+playerTwo = player("Player2", 
+['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20'], 0)
 
 # test cases
+# get methods
+print(playerOne.getName())
+print(playerOne.getDeck())
+print(playerOne.getScore())
+print(playerTwo.getName())
+print(playerTwo.getDeck())
+print(playerTwo.getScore())
+# set method
+playerOne.setName("John") # name test
+print(playerOne.getName())
+playerOne.appendDeck('21') # deck append test
+print(playerOne.getDeck())
+playerOne.shuffleDeck(playerOne.getDeck()) # deck shuffle test
+print(playerOne.getDeck()) 
 
 
 
@@ -274,7 +291,7 @@ def draw_match_screen(screen, title_font, button_font, WIDTH, HEIGHT, RED, WHITE
     # place text beside player's decks and discard piles
     # data for player 1
     player1_Name = pygame.Rect(WIDTH * 0.25 - 85, -5, 120, 45)
-    pygame.draw.rect(screen, RED, player.getName())
+    pygame.draw.rect(screen, RED, player1_Name)
     draw_text(f"{nickName1}", pygame.font.Font(None, 30), WHITE, screen, WIDTH * 0.25 - 30, 20)
     draw_text("Score", small_font, WHITE, screen, card1_x - 50, card1_y + 30)
     draw_text(f"{player1_deck_Score}", small_font, WHITE, screen, card1_x - 50, card1_y + 50)
