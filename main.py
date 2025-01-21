@@ -39,7 +39,6 @@ player1 = {
 }'''
 
 
-
 # screens section
 
 # loading images into pygame
