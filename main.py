@@ -336,7 +336,7 @@ def game():
     pygame.font.Font(None, 100), (255, 0, 0), screen, discard2_x + 160, discard2_y + 100)
 
 
-
+    
     # use this at some point ESSENTIAL
     # if something blah blah:
     #   countdown_Off = False
@@ -345,7 +345,7 @@ def game():
 current_screen = "authentication"
 
 # variables for countdown display
-counter, text = 5, '5'
+counter, text = 6, '6'
 
 # initialises countdown
 clock = pygame.time.Clock()
@@ -354,9 +354,6 @@ pygame.time.set_timer(pygame.USEREVENT, 1000)
 # boolean variable which determines whether countdown is closed or left running
 countdown_Off = False
 
-# variables for game function
-# determines if a play (like a duel or normal flip) has finished (including completion of score allocation)
-play_End = True
 
 # input fields from setup screen
 useroneName_inputfield = textInput(300, 200, 200, 40, button_font)
@@ -445,14 +442,15 @@ while True:
                 usertwoName_inputfield.draw(screen)
 
         # countdown timer 
-        if event.type == pygame.USEREVENT:
-            if current_screen == "match":
+        if event.type == pygame.USEREVENT and current_screen == "match":
+            if countdown_Off == False:
                 if counter > 1:
                     counter -= 1
                     text = str(counter)
                 else:
                     text = "Flip!"
-                    
+                    # counter = 5 this sets off the recurring countdown use elsewhere like the game function
+                
     clock.tick(60)
 
 
@@ -482,7 +480,7 @@ while True:
 
     elif current_screen == "match":
         draw_match_screen(screen, title_font, button_font, WIDTH, HEIGHT, RED, WHITE)
-        if countdown_Off != True:
+        if countdown_Off == False:
             screen.blit(countdown_font.render(text, True, (255, 255, 255)), 
             ((WIDTH // 2 - totem_Image.get_width() // 2) + 52, 
             (HEIGHT // 2 - totem_Image.get_height() // 2) + 18))
@@ -490,13 +488,10 @@ while True:
             if text == "Flip!":
                 # after the end of the countdown, the game
                 game()
-        elif text == "Flip!":
-            # consider adjusting speed later
-            countdown_Off = True
-
+                countdown_Off = True
         elif gameOn == True:
             game()
-
+ 
 
     pygame.display.flip()
     
