@@ -23,7 +23,7 @@ GREEN = (0, 255, 0)
 GREY = (200, 200, 200)
 
 # fonts
-title_font = pygame.font.Font(None, 74)
+title_font = pygame.font.Font(None, 80)
 button_font = pygame.font.Font(None, 50)
 small_font = pygame.font.Font(None, 24)
 countdown_font = pygame.font.SysFont(None, 380)
@@ -119,7 +119,7 @@ def draw_mainMenu_screen(screen, title_font, button_font, WIDTH, HEIGHT, LIGHTRE
     settings_button = screen.blit(settingsIcon_image, (WIDTH * 0.93, HEIGHT * 0.013888889))
     back_button = screen.blit(backIcon_image, (10,10)) 
     info_button = screen.blit(infoIcon_image, (WIDTH * 0.87, HEIGHT * 0.013888889))
-    play_button = pygame.Rect(WIDTH * 0.298, HEIGHT * 0.55555556, WIDTH // 2.5, HEIGHT * 0.10416667)
+    play_button = pygame.Rect(WIDTH * 0.298, HEIGHT * 0.55555556, WIDTH // 2.5, HEIGHT * 0.10396667)
     pygame.draw.rect(screen, RED, play_button)
     draw_text("Play", pygame.font.Font(None, 55), WHITE, screen, WIDTH * 0.493, HEIGHT * 0.611111111)
 
@@ -147,7 +147,6 @@ class textInput:
         self.text_surface = self.font.render(self.text, True, BLACK) 
         # checks to see if input box has been entered into
         self.active = True
-    '''THERE IS SOMETHING WRONG WITH CONSTRUCTOR METHOD, TAKE A CLOSE LOOK WHEN YOU CAN'''
     def handle_event(self, event):
         # quits in input screen
         if event.type == pygame.QUIT:
@@ -192,17 +191,26 @@ class textInput:
 
 # draw the setup screen
 def draw_setUp_screen(screen, title_font, button_font, WIDTH, HEIGHT, RED, WHITE):
-    draw_text("Setup", title_font, pygame.Color('black'), screen, WIDTH // 2, HEIGHT // 8)
-    # initialises two input fields using textInput class
-    #useroneName_inputfield = textInput(300, 200, 200, 40, button_font)
-    #usertwoName_inputfield = textInput(300, 300, 200, 40, button_font)
+    # title of the screen
+    draw_text("Setup", title_font, BLACK, screen, WIDTH // 2, HEIGHT // 8 - 25)
+
+    draw_text("Player 1 Name:", pygame.font.Font(None, 45), BLACK, screen, WIDTH * 0.2510417, HEIGHT * 0.22222)
+    draw_text("*top of screen*", pygame.font.Font(None, 35), BLACK, screen, WIDTH * 0.2510417, HEIGHT * 0.28)
+    draw_text("Grab Key: A", pygame.font.Font(None, 45), RED, screen, WIDTH * 0.7271, HEIGHT * 0.22222)
+
+
+    draw_text("Player 2 Name:", pygame.font.Font(None, 45), BLACK, screen, WIDTH * 0.2510417, HEIGHT * 0.44)
+    draw_text("*bottom of screen*", pygame.font.Font(None, 35), BLACK, screen, WIDTH * 0.2510417, HEIGHT * 0.50)
+    draw_text("Grab Key: L", pygame.font.Font(None, 45), RED, screen, WIDTH * 0.7271, HEIGHT * 0.44)
+
+
     # submit button used for completion of assigning user names 
     submit_button = pygame.Rect(WIDTH * 0.33, HEIGHT * 0.65, WIDTH * 0.35, 75)
     # draws shape and text for the submit button
     pygame.draw.rect(screen, RED, submit_button)
     draw_text("Submit", button_font, WHITE, screen, WIDTH * 0.5, HEIGHT * 0.7)
-   # textInput.draw(useroneName_inputfield, screen)
-    #textInput.draw(usertwoName_inputfield, screen)
+
+    # displays back button
     back_button = screen.blit(backIcon_image, (10,10))
 
     return submit_button, back_button
@@ -335,7 +343,7 @@ def game():
     draw_text(playerTwo.getDeckItem(current_Card), 
     pygame.font.Font(None, 100), (255, 0, 0), screen, discard2_x + 160, discard2_y + 100)
 
-
+    countdown_Off = False
     
     # use this at some point ESSENTIAL
     # if something blah blah:
@@ -345,7 +353,7 @@ def game():
 current_screen = "authentication"
 
 # variables for countdown display
-counter, text = 6, '6'
+counter, text = 5, '5'
 
 # initialises countdown
 clock = pygame.time.Clock()
@@ -356,8 +364,8 @@ countdown_Off = False
 
 
 # input fields from setup screen
-useroneName_inputfield = textInput(300, 200, 200, 40, button_font)
-usertwoName_inputfield = textInput(300, 300, 200, 40, button_font)
+useroneName_inputfield = textInput(WIDTH * 0.396, HEIGHT * 0.209, 200, 40, button_font)
+usertwoName_inputfield = textInput(WIDTH * 0.396, HEIGHT * 0.417, 200, 40, button_font)
 
 # main loop
 while True:
@@ -486,7 +494,7 @@ while True:
             (HEIGHT // 2 - totem_Image.get_height() // 2) + 18))
             # this allows the game function to begin right after the ending of the countdown
             if text == "Flip!":
-                # after the end of the countdown, the game
+                # game function runs after end of countdown
                 game()
                 countdown_Off = True
         elif gameOn == True:
