@@ -234,12 +234,12 @@ class player():
     # set methods 
     def setName(self, newName): # name setter
         self.__name = newName
-    def appendDeck(self, newData): # deck setter
-        self.__deck.append(newData)
-    def popDeck(self, popData):
-        pass
-    def shuffleDeck(self, deck):
+    def shuffleDeck(self, deck): # deck setter
         random.shuffle(deck)
+    def appendDeck(self, newData): 
+        self.__deck.append(newData)
+    def popDeckItem(self, popIndex):
+        self.__deck.pop(popIndex)
 
 # instantiated player objects
 playerOne = player("Player1", 
@@ -263,8 +263,8 @@ print(playerOne.getDeck())
 playerOne.shuffleDeck(playerOne.getDeck()) # deck shuffle test
 print(playerOne.getDeck()) '''
 
-# keeps track of the quantity of cards that have been flipped
-discardpile_total_Count = 0
+# keeps track of the specific cards that have been flipped onto dashed box (discard pile)
+discard_pile = []
 
 # draws the match screen
 def draw_match_screen(screen, title_font, button_font, WIDTH, HEIGHT, RED, WHITE):
@@ -315,7 +315,11 @@ def draw_match_screen(screen, title_font, button_font, WIDTH, HEIGHT, RED, WHITE
     draw_text(f"{playerTwo.getScore()}", small_font, WHITE, screen, card2_x - 50, card2_y + 50)
     # discard pile total count
     draw_text("Discard Pile Total:", small_font, WHITE, screen, 80, HEIGHT // 2 - 85)
-    draw_text(f"{discardpile_total_Count}", small_font, WHITE, screen, 75, HEIGHT // 2 - 65)
+    if discard_pile == []:
+        draw_text(f"{0}", small_font, WHITE, screen, 75, HEIGHT // 2 - 65)
+    elif len(discard_pile) > 0:
+        draw_text(f"{len(discard_pile)}", small_font, WHITE, screen, 75, HEIGHT // 2 - 65)
+
 
 
 # variables used for game function
@@ -323,31 +327,139 @@ wait = 0 # increment variable, 'waits' for 3 seconds before resuming next play
 gameOn = False # boolean variable determines if game function is running
 # where the core game begins and ends
 def game():
+    '''JUST PUT THIS INTO ITS OWN EVENT.GET FOR LOOP, THAT WAY YOU SOLVE THE PROBLEM - SEE IF THAT WORKS'''
+    # time variables for duels and normal flips
+    clock = pygame.time.Clock()
+    round_start_time = None
 
     # boolean variable determines if game function runs or not
     gameOn = True
     # boolean variable determines if a deck is shuffled
-    isShuffled = False
-    # determines current variable
-    current_Card = 0
+    shuffle = False
+    # determines current card of player one
+    playerone_currcard = 0
+    # determines current card of player two
+    playertwo_currcard = 0
+
+    global show_numbers
+    show_numbers = False
+
+    # determines who receives discard pile contents
+    loser = 0
 
     # validates if deck has been shuffled
-    if isShuffled != True:
+    if not shuffle:
         playerOne.shuffleDeck(playerOne.getDeck())
         playerTwo.shuffleDeck(playerTwo.getDeck())
-    
-    # displaying player one current card 
-    draw_text(playerOne.getDeckItem(current_Card), 
-    pygame.font.Font(None, 100), (255, 0, 0), screen, discard1_x + 160, discard1_y + 100)
-    # displaying player two current card
-    draw_text(playerTwo.getDeckItem(current_Card), 
-    pygame.font.Font(None, 100), (255, 0, 0), screen, discard2_x + 160, discard2_y + 100)
+        shuffle = True
 
-    countdown_Off = False
+    
+    while True:
+        screen.fill(LIGHTRED)
+        draw_match_screen(screen, title_font, button_font, WIDTH, HEIGHT, RED, WHITE)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+
+            # checks if players have clicked a key event and if numbers should be shown
+            if event.type == pygame.KEYDOWN and show_numbers:
+                # duel check condition
+                if playerone_currcard == playertwo_currcard:
+
+                    # player one check
+                    if event.key == pygame.K_a:
+                        # output
+                        draw_text("{} won the duel!".format(playerOne.getName()), 
+                        pygame.font.Font(None, 60), BLUE, screen, WIDTH // 2 * 3, HEIGHT // 2 )
+                        
+                        # player two is the loser of the duel
+                        loser = 2
+
+                    # player two check
+                    elif event.key == pygame.K_l:
+                        # output
+                        draw_text("{} won the duel!".format(playerTwo.getName()), 
+                        pygame.font.Font(None, 60), BLUE, screen, WIDTH // 2 * 3, HEIGHT // 2 )
+
+                        # player one is the loser of the duel
+                        loser = 1
+                    
+                    # discard pile and decks handled and updated
+                    elif loser == 2:
+                        # add all cards in discard pile to loser's deck
+                        (playerTwo.getDeck()).extend(discard_pile)
+                        # empty discard pile as cards have been moved
+                        discard_pile.clear()
+                    elif loser == 1:
+                        # add all cards in discard pile to loser's deck
+                        (playerOne.getDeck()).extend(discard_pile)
+                        # empty discard pile as cards have been moved
+                        discard_pile.clear()
+
+                # normal flip check if player wrongly pressed their allocated keys
+                else:
+                    # player one check
+                    if event.key == pygame.K_a:
+                        # message
+                        draw_text("{} misread the cards!".format(playerOne.getName()), 
+                        pygame.font.Font(None, 60), BLUE, screen, WIDTH // 2 * 3, HEIGHT // 2 )
+                        # deck updated
+                        (playerOne.getDeck()).extend(discard_pile)
+
+                    # player two check
+                    elif event.key == pygame.K_l:
+                        # message
+                        draw_text("{} misread the cards!".format(playerTwo.getName()), 
+                        pygame.font.Font(None, 60), BLUE, screen, WIDTH // 2 * 3, HEIGHT // 2 )
+                        # deck updated
+                        (playerTwo.getDeck()).extend(discard_pile)
+        
+        # start a new round
+        if not show_numbers:
+            playerone_currcard = random.choice(playerOne.getDeck())
+            playertwo_currcard = random.choice(playerTwo.getDeck())
+            round_start_time = time.time()
+            show_numbers = True
+            # boolean variable ensures cards are added to discard pile only once
+            cards_added_to_discard = False
+
+        # display numbers for 3 seconds
+        if show_numbers:
+            # displaying player one current card 
+            draw_text(str(playerone_currcard), 
+            pygame.font.Font(None, 100), (255, 0, 0), screen, discard1_x + 160, discard1_y + 100)
+            # displaying player two current card
+            draw_text(str(playertwo_currcard), 
+            pygame.font.Font(None, 100), (255, 0, 0), screen, discard2_x + 160, discard2_y + 100)
+
+            # updating discard pile and deck for both players
+            if not cards_added_to_discard:
+                discard_pile.append(str(playerone_currcard))
+                discard_pile.append(str(playertwo_currcard))
+                
+                if playerone_currcard in playerOne.getDeck():
+                    (playerOne.getDeck()).remove(playerone_currcard)
+                if playerone_currcard in playerOne.getDeck():  
+                    (playerTwo.getDeck()).remove(playertwo_currcard)
+                # so cards aren't added again
+                cards_added_to_discard = True
+
+            if time.time() - round_start_time > 3:
+                show_numbers = False        
+                
+        pygame.display.flip()
+        clock.tick(60)
+
+
+
+
+
+    
     
     # use this at some point ESSENTIAL
     # if something blah blah:
-    #   countdown_Off = False
+    #   countdown_off = False
 
 # variable used to determine current screen state
 current_screen = "authentication"
@@ -360,7 +472,7 @@ clock = pygame.time.Clock()
 pygame.time.set_timer(pygame.USEREVENT, 1000)
 
 # boolean variable which determines whether countdown is closed or left running
-countdown_Off = False
+countdown_off = False
 
 
 # input fields from setup screen
@@ -451,14 +563,16 @@ while True:
 
         # countdown timer 
         if event.type == pygame.USEREVENT and current_screen == "match":
-            if countdown_Off == False:
+            if countdown_off == False:
                 if counter > 1:
                     counter -= 1
                     text = str(counter)
                 else:
                     text = "Flip!"
                     # counter = 5 this sets off the recurring countdown use elsewhere like the game function
-                
+    ''' # only runs counter for duel and/or nomral flips if game function is active
+        if gameOn:        
+            wait += 1'''
     clock.tick(60)
 
 
@@ -487,19 +601,28 @@ while True:
         usertwoName_inputfield.draw(screen)
 
     elif current_screen == "match":
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+
         draw_match_screen(screen, title_font, button_font, WIDTH, HEIGHT, RED, WHITE)
-        if countdown_Off == False:
+        if countdown_off == False:
             screen.blit(countdown_font.render(text, True, (255, 255, 255)), 
             ((WIDTH // 2 - totem_Image.get_width() // 2) + 52, 
             (HEIGHT // 2 - totem_Image.get_height() // 2) + 18))
-            # this allows the game function to begin right after the ending of the countdown
-            if text == "Flip!":
-                # game function runs after end of countdown
-                game()
-                countdown_Off = True
+            
+        if text == "Flip!" or countdown_off:
+            # game function runs after end of countdown
+            game()
+            countdown_off = True
         elif gameOn == True:
             game()
  
+
+     # only runs counter for duel and/or nomral flips if game function is active
+    if gameOn:        
+        wait += 1
+
 
     pygame.display.flip()
     
