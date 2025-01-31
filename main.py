@@ -25,7 +25,7 @@ GREY = (200, 200, 200)
 # fonts
 title_font = pygame.font.Font(None, 80)
 button_font = pygame.font.Font(None, 50)
-small_font = pygame.font.Font(None, 24)
+small_font = pygame.font.Font(None, 27)
 countdown_font = pygame.font.SysFont(None, 380)
 # change to timesnewroman which is nicer after NEA
 
@@ -194,13 +194,13 @@ def draw_setUp_screen(screen, title_font, button_font, WIDTH, HEIGHT, RED, WHITE
     # title of the screen
     draw_text("Setup", title_font, BLACK, screen, WIDTH // 2, HEIGHT // 8 - 25)
 
-    draw_text("Player 1 Name:", pygame.font.Font(None, 45), BLACK, screen, WIDTH * 0.2510417, HEIGHT * 0.22222)
-    draw_text("*bottom of screen*", pygame.font.Font(None, 35), BLACK, screen, WIDTH * 0.2510417, HEIGHT * 0.28)
+    draw_text("Player Name:", pygame.font.Font(None, 45), BLACK, screen, WIDTH * 0.2510417, HEIGHT * 0.22222)
+    draw_text("*top of screen*", pygame.font.Font(None, 35), BLACK, screen, WIDTH * 0.2510417, HEIGHT * 0.28)
     draw_text("Grab Key: A", pygame.font.Font(None, 45), RED, screen, WIDTH * 0.7271, HEIGHT * 0.22222)
 
 
-    draw_text("Player 2 Name:", pygame.font.Font(None, 45), BLACK, screen, WIDTH * 0.2510417, HEIGHT * 0.44)
-    draw_text("*top of screen*", pygame.font.Font(None, 35), BLACK, screen, WIDTH * 0.2510417, HEIGHT * 0.50)
+    draw_text("Player Name:", pygame.font.Font(None, 45), BLACK, screen, WIDTH * 0.2510417, HEIGHT * 0.44)
+    draw_text("*bottom of screen*", pygame.font.Font(None, 35), BLACK, screen, WIDTH * 0.2510417, HEIGHT * 0.50)
     draw_text("Grab Key: L", pygame.font.Font(None, 45), RED, screen, WIDTH * 0.7271, HEIGHT * 0.44)
 
 
@@ -334,14 +334,14 @@ def draw_match_screen(screen, title_font, button_font, WIDTH, HEIGHT, RED, WHITE
     player1_nameBox = pygame.Rect(WIDTH * 0.25 - 85, -5, 120, 45)
     pygame.draw.rect(screen, RED, player1_nameBox)
     draw_text(f"{playerOne.getName()}", pygame.font.Font(None, 30), WHITE, screen, WIDTH * 0.25 - 30, 20)
-    draw_text("Score", small_font, WHITE, screen, card1_x - 50, card1_y + 30)
-    draw_text(f"{playerOne.getScore()}", small_font, WHITE, screen, card1_x - 50, card1_y + 50)
+    draw_text("Score", small_font, WHITE, screen, card2_x - 50, card2_y + 30)
+    draw_text(f"{playerOne.getScore()}", small_font, WHITE, screen, card2_x - 50, card2_y + 50)
     # data for player 2
     player2_nameBox = pygame.Rect(WIDTH * 0.75 - 25, HEIGHT - 40, 120, 45)
     pygame.draw.rect(screen, RED, player2_nameBox)
     draw_text(f"{playerTwo.getName()}", pygame.font.Font(None, 30), WHITE, screen, WIDTH * 0.75 + 30, HEIGHT - 20)
-    draw_text("Score", small_font, WHITE, screen, card2_x - 50, card2_y + 30)
-    draw_text(f"{playerTwo.getScore()}", small_font, WHITE, screen, card2_x - 50, card2_y + 50)
+    draw_text("Score", small_font, WHITE, screen, card1_x - 50, card1_y + 30)
+    draw_text(f"{playerTwo.getScore()}", small_font, WHITE, screen, card1_x - 50, card1_y + 50)
     # discard pile total count
     draw_text("Discard Pile Total:", small_font, WHITE, screen, 80, HEIGHT // 2 - 85)
     if discard_pile == []:
@@ -350,6 +350,7 @@ def draw_match_screen(screen, title_font, button_font, WIDTH, HEIGHT, RED, WHITE
         draw_text(f"{len(discard_pile)}", small_font, WHITE, screen, 75, HEIGHT // 2 - 65)
 
 def draw_endgame_screen(screen, title_font, WIDTH, HEIGHT):
+    screen.fill(LIGHTRED)
     draw_text("Game Over", title_font, BLACK, screen, WIDTH // 2, HEIGHT // 8)
     if playerOne.getScore() == 0:
         draw_text("{} Wins!".format(playerOne.getName()), title_font, GREEN, screen, WIDTH // 2, HEIGHT // 2)
@@ -358,7 +359,6 @@ def draw_endgame_screen(screen, title_font, WIDTH, HEIGHT):
         draw_text("{} Wins!".format(playerTwo.getName()), title_font, GREEN, screen, WIDTH // 2, HEIGHT // 2)
 
 # variables used for game function
-wait = 0 # increment variable, 'waits' for 3 seconds before resuming next play
 gameOn = False # boolean variable determines if game function is running
 # where the core game begins and ends
 def game(current_scrn):
@@ -397,9 +397,6 @@ def game(current_scrn):
         screen.fill(LIGHTRED)
         draw_match_screen(screen, title_font, button_font, WIDTH, HEIGHT, RED, WHITE)
         
-        if playerOne.getScore() == "0" or playerTwo.getScore() == "0":
-            current_scrn = "endgame"
-            break
 
         ''' NOTE: THIS IS THE PROGRESS MADE WITH DISPLAYING MESSAGES TO PLAYERS, CONTINUE ANOTHER TIME
         the way it works is that you use the boolean variables to determine if a certain condition has been met.
@@ -413,7 +410,11 @@ def game(current_scrn):
         normal_flip_player_two = False
         duel_player_one = False
         duel_player_two = False'''
-
+        # used for another purpose
+        duel_player_one = False
+        duel_player_two = False
+        normal_flip_player_one = False
+        normal_flip_player_two = False
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -434,7 +435,9 @@ def game(current_scrn):
                         # flag for displaying message result
                         duel_player_one = True'''
                         # display message
-                        print("{} won the duel!".format(playerOne.getName()))
+                        #if duel_player_one == False:
+                        print("{} WON THE DUEL!".format(playerOne.getName()))
+                        #    duel_player_one = True
 
                         # deck and discard pile updating
                         # add all cards in discard pile to loser's deck
@@ -453,8 +456,10 @@ def game(current_scrn):
                         # flag for displaying message result
                         duel_player_two = True'''
 
-                        # display message
-                        print("{} won the duel!".format(playerTwo.getName()))
+                        # display message   
+                        #if duel_player_two == False:                     
+                        print("{} WON THE DUEL!".format(playerTwo.getName()))
+                         #   duel_player_two = True
 
                         # deck and discard pile updating
                         # add all cards in discard pile to loser's deck
@@ -468,10 +473,11 @@ def game(current_scrn):
                         loser = 1
                     
                     
-
+                
                 # normal flip check if player wrongly pressed their allocated keys
-                else:
+                elif playerone_currcard != playertwo_currcard:
                     # player one check
+                    
                     if event.key == pygame.K_a:
                         '''
                         # message
@@ -481,7 +487,9 @@ def game(current_scrn):
                         normal_flip_player_one = True'''
 
                         # display message
-                        print("{} misread the cards!".format(playerOne.getName()))
+                        if normal_flip_player_one == False:
+                            print("{} MISREAD THE CARDS!".format(playerOne.getName()))
+                            normal_flip_player_one = True
 
 
                         # deck and discard pile updated
@@ -498,11 +506,14 @@ def game(current_scrn):
                         normal_flip_player_two = True'''
 
                         # display message
-                        print("{} misread the cards!".format(playerTwo.getName()))
+                        if normal_flip_player_two == False:
+                            print("{} MISREAD THE CARDS!".format(playerTwo.getName()))
+                            normal_flip_player_two = True
 
                         # deck updated
                         (playerTwo.getDeck()).extend(discard_pile)
                         discard_pile.clear()
+                
         
         # start a new round
         if not show_numbers:
@@ -513,6 +524,12 @@ def game(current_scrn):
             # boolean variable ensures cards are added to discard pile only once
             cards_added_to_discard = False
             grabbed = False
+            # reset display boolean variables for next round
+            '''
+            duel_player_one = False
+            duel_player_two = False
+            normal_flip_player_one = False
+            normal_flip_player_two = False'''
 
         # display numbers for 3 seconds
         if show_numbers:
@@ -528,10 +545,12 @@ def game(current_scrn):
                 discard_pile.append(str(playerone_currcard))
                 discard_pile.append(str(playertwo_currcard))
                 
-                if playerone_currcard in playerOne.getDeck():
-                    (playerOne.getDeck()).remove(playerone_currcard)
-                if playertwo_currcard in playerTwo.getDeck():  
-                    (playerTwo.getDeck()).remove(playertwo_currcard)
+            
+                (playerOne.getDeck()).remove(playerone_currcard)
+                
+                
+                (playerTwo.getDeck()).remove(playertwo_currcard)
+                
                 # so cards aren't added again
                 cards_added_to_discard = True
 
@@ -556,9 +575,17 @@ def game(current_scrn):
                         pygame.font.Font(None, 60), BLUE, screen, WIDTH // 2, HEIGHT // 2 )
                         '''
         
-        
+        if playerOne.getScore() == "0":
+            #current_scrn = "endgame"
+            print("Game Over!")
+            print("{} wins!".format(playerTwo.getName()))
+            break
+        elif playerTwo.getScore() == "0":
+            print("Game Over!")
+            print("{} wins!".format(playerOne.getName()))
+            break
         pygame.display.flip()
-        clock.tick(60) 
+        
         
 
 
@@ -586,8 +613,8 @@ countdown_off = False
 
 
 # input fields from setup screen
-useroneName_inputfield = textInput(WIDTH * 0.396, HEIGHT * 0.417, 200, 40, button_font)
-usertwoName_inputfield = textInput(WIDTH * 0.396, HEIGHT * 0.209, 200, 40, button_font)
+useroneName_inputfield = textInput(WIDTH * 0.396, HEIGHT * 0.209, 200, 40, button_font)
+usertwoName_inputfield = textInput(WIDTH * 0.396, HEIGHT * 0.417, 200, 40, button_font)
 
 # main loop
 while True:
@@ -730,7 +757,6 @@ while True:
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
-        
         draw_endgame_screen(screen, title_font, WIDTH, HEIGHT, RED, WHITE)
         
 
