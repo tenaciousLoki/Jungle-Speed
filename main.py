@@ -5,6 +5,7 @@ import random
 import os
 import time
 
+
 # initialize pygame
 pygame.init()
 
@@ -382,9 +383,6 @@ def game():
     playertwo_currcard = 0
 
 
-    # determines who receives discard pile contents
-    loser = 0
-
     # validates if deck has been shuffled
     if not shuffle:
         playerOne.shuffleDeck(playerOne.getDeck())
@@ -401,6 +399,7 @@ def game():
         screen.fill(LIGHTRED)
         draw_match_screen(screen, title_font, button_font, WIDTH, HEIGHT, RED, WHITE)
         
+                
 
         ''' NOTE: THIS IS THE PROGRESS MADE WITH DISPLAYING MESSAGES TO PLAYERS, CONTINUE ANOTHER TIME
         the way it works is that you use the boolean variables to determine if a certain condition has been met.
@@ -414,186 +413,183 @@ def game():
         normal_flip_player_two = False
         duel_player_one = False
         duel_player_two = False'''
-       
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
+        if playerOne.getScore() != 0 or playerTwo.getScore() != 0:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
 
-            # checks if players have clicked a key event and if numbers should be shown
-            if event.type == pygame.KEYDOWN and show_numbers:
-                # duel check condition
-                if playerone_currcard == playertwo_currcard:
+                # checks if players have clicked a key event and if numbers should be shown
+                if event.type == pygame.KEYDOWN and show_numbers:
+                    # duel check condition
+                    if playerone_currcard == playertwo_currcard:
 
-                    # player one check
-                    if event.key == pygame.K_a and not grabbed and not duel_action_player_one:
-                        '''
-                        # output
-                        draw_text("{} won the duel!".format(playerOne.getName()), 
-                        pygame.font.Font(None, 60), BLUE, screen, WIDTH // 2, HEIGHT // 2 )
-                        # flag for displaying message result
-                        duel_player_one = True'''
-                        # display message
-                        #if duel_player_one == False:
-                        print("{} WON THE DUEL!".format(playerOne.getName()))
-                        #    duel_player_one = True
+                        # player one check
+                        if event.key == pygame.K_a and not duel_action_player_one:
+                            '''
+                            # output
+                            draw_text("{} won the duel!".format(playerOne.getName()), 
+                            pygame.font.Font(None, 60), BLUE, screen, WIDTH // 2, HEIGHT // 2 )
+                            # flag for displaying message result
+                            duel_player_one = True'''
+                            # display message
+                            #if duel_player_one == False:
+                            print("{} WON THE DUEL!".format(playerOne.getName()))
+                            #    duel_player_one = True
 
-                        # deck and discard pile updating
-                        # add all cards in discard pile to loser's deck
-                        (playerTwo.getDeck()).extend(discard_pile)
-                        # empty discard pile as cards have been moved
-                        discard_pile.clear()
+                            # deck and discard pile updating
+                            # add all cards in discard pile to loser's deck
+                            (playerTwo.getDeck()).extend(discard_pile)
+                            # empty discard pile as cards have been moved
+                            discard_pile.clear()
 
-                        grabbed = True
-                        duel_action_player_one = True
-                    # player two check
-                    elif event.key == pygame.K_l and not grabbed and not duel_action_player_two:
-                        '''
-                        # output
-                        draw_text("{} won the duel!".format(playerTwo.getName()), 
-                        pygame.font.Font(None, 60), BLUE, screen, WIDTH // 2, HEIGHT // 2 )
-                        # flag for displaying message result
-                        duel_player_two = True'''
+                            duel_action_player_one = True
+                        # player two check
+                        elif event.key == pygame.K_l and not duel_action_player_two:
+                            '''
+                            # output
+                            draw_text("{} won the duel!".format(playerTwo.getName()), 
+                            pygame.font.Font(None, 60), BLUE, screen, WIDTH // 2, HEIGHT // 2 )
+                            # flag for displaying message result
+                            duel_player_two = True'''
 
-                        # display message   
-                        #if duel_player_two == False:                     
-                        print("{} WON THE DUEL!".format(playerTwo.getName()))
-                         #   duel_player_two = True
+                            # display message   
+                            #if duel_player_two == False:                     
+                            print("{} WON THE DUEL!".format(playerTwo.getName()))
+                            #   duel_player_two = True
 
-                        # deck and discard pile updating
-                        # add all cards in discard pile to loser's deck
-                        (playerOne.getDeck()).extend(discard_pile)
-                        # empty discard pile as cards have been moved
-                        discard_pile.clear()
+                            # deck and discard pile updating
+                            # add all cards in discard pile to loser's deck
+                            (playerOne.getDeck()).extend(discard_pile)
+                            # empty discard pile as cards have been moved
+                            discard_pile.clear()
 
+                            duel_action_player_two = True
+                        
+                        
                     
-                        grabbed = True
-                        action_performed_player_two = True
-                    
-                    
-                
-                # normal flip check if player wrongly pressed their allocated keys
-                elif playerone_currcard != playertwo_currcard:
-                    # player one check
-                    
-                    if event.key == pygame.K_a and not normalflip_action_player_one:
-                        '''
-                        # message
-                        draw_text("{} misread the cards!".format(playerOne.getName()), 
-                        pygame.font.Font(None, 60), BLUE, screen, WIDTH // 2 , HEIGHT // 2 )
-                        # flag for displaying message result
-                        normal_flip_player_one = True'''
+                    # normal flip check if player wrongly pressed their allocated keys
+                    elif playerone_currcard != playertwo_currcard:
+                        # player one check
+                        
+                        if event.key == pygame.K_a and not normalflip_action_player_one:
+                            '''
+                            # message
+                            draw_text("{} misread the cards!".format(playerOne.getName()), 
+                            pygame.font.Font(None, 60), BLUE, screen, WIDTH // 2 , HEIGHT // 2 )
+                            # flag for displaying message result
+                            normal_flip_player_one = True'''
 
-                        # display message
-                        #if normal_flip_player_one == False:
-                        print("{} MISREAD THE CARDS!".format(playerOne.getName()))
-                            #normal_flip_player_one = True
+                            # display message
+                            #if normal_flip_player_one == False:
+                            print("{} MISREAD THE CARDS!".format(playerOne.getName()))
+                                #normal_flip_player_one = True
 
 
-                        # deck and discard pile updated
-                        (playerOne.getDeck()).extend(discard_pile)
-                        discard_pile.clear()
+                            # deck and discard pile updated
+                            (playerOne.getDeck()).extend(discard_pile)
+                            discard_pile.clear()
 
-                        normalflip_action_player_one = True 
+                            normalflip_action_player_one = True 
 
-                    # player two check
-                    elif event.key == pygame.K_l and not normalflip_action_player_two:
-                        '''
-                        # message
-                        draw_text("{} misread the cards!".format(playerTwo.getName()), 
-                        pygame.font.Font(None, 60), BLUE, screen, WIDTH // 2, HEIGHT // 2 )
-                        # flag for displaying message result
-                        normal_flip_player_two = True'''
+                        # player two check
+                        elif event.key == pygame.K_l and not normalflip_action_player_two:
+                            '''
+                            # message
+                            draw_text("{} misread the cards!".format(playerTwo.getName()), 
+                            pygame.font.Font(None, 60), BLUE, screen, WIDTH // 2, HEIGHT // 2 )
+                            # flag for displaying message result
+                            normal_flip_player_two = True'''
 
-                        # display message
-                        #if normal_flip_player_two == False:
-                        print("{} MISREAD THE CARDS!".format(playerTwo.getName()))
-                         #   normal_flip_player_two = True
+                            # display message
+                            #if normal_flip_player_two == False:
+                            print("{} MISREAD THE CARDS!".format(playerTwo.getName()))
+                            #   normal_flip_player_two = True
 
-                        # deck updated
-                        (playerTwo.getDeck()).extend(discard_pile)
-                        discard_pile.clear()
+                            # deck updated
+                            (playerTwo.getDeck()).extend(discard_pile)
+                            discard_pile.clear()
 
-                        normalflip_action_player_two = True
-        
-        # start a new round
-        if not show_numbers:
-            playerone_currcard = random.choice(playerOne.getDeck())
-            playertwo_currcard = random.choice(playerTwo.getDeck())
-            round_start_time = time.time()
-            show_numbers = True
-            # boolean variable ensures cards are added to discard pile only once
-            cards_added_to_discard = False
-            grabbed = False
-            # reset display boolean variables for next round
-            '''
-            duel_player_one = False
-            duel_player_two = False
-            normal_flip_player_one = False
-            normal_flip_player_two = False'''
-
-        # display numbers for 3 seconds
-        if show_numbers:
-            # displaying player one current card 
-            draw_text(str(playerone_currcard), 
-            pygame.font.Font(None, 100), (255, 0, 0), screen, discard1_x + 160, discard1_y + 100)
-            # displaying player two current card
-            draw_text(str(playertwo_currcard), 
-            pygame.font.Font(None, 100), (255, 0, 0), screen, discard2_x + 160, discard2_y + 100)
-        
-            # updating discard pile and deck for both players
-            if not cards_added_to_discard:
-                discard_pile.append(str(playerone_currcard))
-                discard_pile.append(str(playertwo_currcard))
-                
+                            normalflip_action_player_two = True
             
-                (playerOne.getDeck()).remove(playerone_currcard)
-                
-                
-                (playerTwo.getDeck()).remove(playertwo_currcard)
-                
-                # so cards aren't added again
-                cards_added_to_discard = True
+            # start a new round
+            if not show_numbers:
+                playerone_currcard = random.choice(playerOne.getDeck())
+                playertwo_currcard = random.choice(playerTwo.getDeck())
+                round_start_time = time.time()
+                show_numbers = True
+                # boolean variable ensures cards are added to discard pile only once
+                cards_added_to_discard = False
+                grabbed = False
+                # reset display boolean variables for next round
+                '''
+                duel_player_one = False
+                duel_player_two = False
+                normal_flip_player_one = False
+                normal_flip_player_two = False'''
 
-            if time.time() - round_start_time > 3:
-                show_numbers = False    
-                # reset boolean variables for next round
-                duel_action_player_one = False
-                duel_action_player_two = False
-                normalflip_action_player_one = False
-                normalflip_action_player_two = False 
-
-            '''elif time.time() - round_start_time < 3 and show_numbers: 
-                if duel_player_one:
-                    draw_text("{} won the duel!".format(playerOne.getName()), 
-                        pygame.font.Font(None, 60), BLUE, screen, WIDTH // 2, HEIGHT // 2 )
+            # display numbers for 3 seconds
+            if show_numbers:
+                # displaying player one current card 
+                draw_text(str(playerone_currcard), 
+                pygame.font.Font(None, 100), (255, 0, 0), screen, discard1_x + 160, discard1_y + 100)
+                # displaying player two current card
+                draw_text(str(playertwo_currcard), 
+                pygame.font.Font(None, 100), (255, 0, 0), screen, discard2_x + 160, discard2_y + 100)
+            
+                # updating discard pile and deck for both players
+                if not cards_added_to_discard:
+                    discard_pile.append(str(playerone_currcard))
+                    discard_pile.append(str(playertwo_currcard))
+                    
                 
-                elif duel_player_two:
-                    draw_text("{} won the duel!".format(playerTwo.getName()), 
-                        pygame.font.Font(None, 60), BLUE, screen, WIDTH // 2, HEIGHT // 2 )
-                        
-                elif normal_flip_player_one:
-                    draw_text("{} misread the cards!".format(playerOne.getName()), 
-                        pygame.font.Font(None, 60), BLUE, screen, WIDTH // 2 , HEIGHT // 2 )
-                        
-                elif normal_flip_player_two:
-                    draw_text("{} misread the cards!".format(playerTwo.getName()), 
-                        pygame.font.Font(None, 60), BLUE, screen, WIDTH // 2, HEIGHT // 2 )
-                        '''
-        
-        if playerOne.getScore() == "0":
-            #current_scrn = "endgame"
-            print("Game Over!")
-            print("{} wins!".format(playerTwo.getName()))
-            break
-        elif playerTwo.getScore() == "0":
-            print("Game Over!")
-            print("{} wins!".format(playerOne.getName()))
-            break
-        pygame.display.flip()
-        
-        
+                    (playerOne.getDeck()).remove(playerone_currcard)
+                    
+                    
+                    (playerTwo.getDeck()).remove(playertwo_currcard)
+                    
+                    # so cards aren't added again
+                    cards_added_to_discard = True
 
+                if time.time() - round_start_time > 3:
+                    show_numbers = False    
+                    # reset boolean variables for next round
+                    duel_action_player_one = False
+                    duel_action_player_two = False
+                    normalflip_action_player_one = False
+                    normalflip_action_player_two = False 
+                    # reset countdown
+                    count_for_game = 3
+
+                '''elif time.time() - round_start_time < 3 and show_numbers: 
+                    if duel_player_one:
+                        draw_text("{} won the duel!".format(playerOne.getName()), 
+                            pygame.font.Font(None, 60), BLUE, screen, WIDTH // 2, HEIGHT // 2 )
+                    
+                    elif duel_player_two:
+                        draw_text("{} won the duel!".format(playerTwo.getName()), 
+                            pygame.font.Font(None, 60), BLUE, screen, WIDTH // 2, HEIGHT // 2 )
+                            
+                    elif normal_flip_player_one:
+                        draw_text("{} misread the cards!".format(playerOne.getName()), 
+                            pygame.font.Font(None, 60), BLUE, screen, WIDTH // 2 , HEIGHT // 2 )
+                            
+                    elif normal_flip_player_two:
+                        draw_text("{} misread the cards!".format(playerTwo.getName()), 
+                            pygame.font.Font(None, 60), BLUE, screen, WIDTH // 2, HEIGHT // 2 )
+                            '''
+            
+            pygame.display.flip()
+            clock.tick(60)
+
+        if playerOne.getScore() == 0:
+            print("\033[92mGame Over!\nResult: '{}' WINS THE GAME.\033[0m".format(playerOne.getName()))
+            pygame.quit()
+            sys.exit()
+        elif playerTwo.getScore() == 0:
+            print("\033[92mGame Over!\nResult: '{}' WINS THE GAME.\033[0m".format(playerTwo.getName()))
+            pygame.quit()
+            sys.exit()
 
 
 
