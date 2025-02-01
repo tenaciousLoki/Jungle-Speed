@@ -798,4 +798,7 @@ while True:
 Note: in your success criteria, when you write for things obvious like ‘can the player understand and it’s easy to read?’ Make sure to get your stakeholders involved. Also once you have completed your code - make sure to remove all unnecessary code which does not impact the results. This includes the file handling etc. Just duplicate the file so that you have it remaining and remove it in the official file. 
     
     
+
+    `DUE` For All Changed Variable Names - Go Through Document & Change Any Documentation Where Variable Names Differ
+    `DUE` Make Sure To Check All English, You Don't Want Them To Misunderstand That You Are Using AI Because You Used American English.
     '''
