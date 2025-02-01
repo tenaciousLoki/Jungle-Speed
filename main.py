@@ -767,3 +767,35 @@ while True:
     pygame.display.flip()
     
     
+    '''
+    Final remaining notes on the code:
+
+    
+
+- *Whenever you approach a big problem - before trying to code and think one by one - use this super effective approach. Give the problem some thought, then use a document to write down everything that you are thinking of how to solve the problem algorithmically. This helps tremendously in gathering and organising your thoughts into one document.*
+
+- `Ideas:` 
+-- consider deleting authentication screen after NEA submission (since that brings your documentation to question to, you chose this because, as Dawood suggested, it makes no sense when you could save win score through 'nickname'). 
+- Instead of having the scores be displayed beside each player, create a small leader board box on the side of the game screen so that both player's can see who is ranking on top.
+
+- Always show the code first, then explain it, and then test to see it works. 
+
+- The purpose of the checklist is to allow you to plan what you will do for the next day. Update this once completed for the next day.
+
+- Whenever you encounter a problem, don't just blankly try to solve it without any clue, instead test it to figure out whats going wrong. Then, look at the program holistically - that will help you see if you have positioned wrong or what not.
+
+
+- Consider using google video for when you film your final testing.
+
+
+
+
+- `IMPORTANT THINGS TO KEEP NOTE OF`: You have to move all the separate document data (algorithms and variable tables) into design document and `YOU NEED TO CHECK THROUGH MARK SCHEME` and make adjustments like with how you need to reference the analysis breakdown of the code in the iterative development section. You need to check with Ms Brown on whether it's fine to explicitly mention how you are using the attribute names (or what ever) in your iterative development (do this because in the official compiled document it may look weird referencing to something else when it is only a couple pages away).
+
+
+
+
+Note: in your success criteria, when you write for things obvious like ‘can the player understand and it’s easy to read?’ Make sure to get your stakeholders involved. Also once you have completed your code - make sure to remove all unnecessary code which does not impact the results. This includes the file handling etc. Just duplicate the file so that you have it remaining and remove it in the official file. 
+    
+    
+    '''
