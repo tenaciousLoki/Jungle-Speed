@@ -594,7 +594,7 @@ def game():
 
         if playerOne.getScore() == 0:
             # to colour text, ANSI escape codes are used
-            print(pygame.Color("\033[92;1mGame Over!\nResult: '{}' WINS THE GAME.\033[0m".format(playerOne.getName())))
+            print(("\033[92;1mGame Over!\nResult: '{}' WINS THE GAME.\033[0m".format(playerOne.getName())))
             pygame.quit()
             sys.exit()
         elif playerTwo.getScore() == 0:
