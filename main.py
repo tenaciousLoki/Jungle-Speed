@@ -701,7 +701,7 @@ while True:
                         # quits program if invalid input
                         else:
                             print("\033[31;1mInvalid input from player one and/or player two.\n" 
-                            "Only enter 8 alphanumeric/non-alphanumeric characters."
+                            "Info: Cannot enter nothing and only enter 8 alphanumeric/non-alphanumeric characters."
                             "\nRestart game and try again.\033[0m"
                             )
                             pygame.quit()
