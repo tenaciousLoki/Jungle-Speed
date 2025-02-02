@@ -148,6 +148,15 @@ class textInput:
         self.text_surface = self.font.render(self.text, True, BLACK) 
         # checks to see if input box has been entered into
         self.active = True
+
+    def validation(self, input_text):
+        if input_text == "":
+            return False
+        elif len(input_text) <= 8:
+            return True
+        else:
+            return False
+        
     def handle_event(self, event):
         # quits in input screen
         if event.type == pygame.QUIT:
@@ -177,6 +186,7 @@ class textInput:
                 else: 
                     # adds the typed character into the input field
                     self.text += event.unicode
+                
             # render the updated text
             self.text_surface = self.font.render(self.text, True, BLACK)
 
@@ -583,11 +593,12 @@ def game():
             clock.tick(60)
 
         if playerOne.getScore() == 0:
-            print("\033[92mGame Over!\nResult: '{}' WINS THE GAME.\033[0m".format(playerOne.getName()))
+            # to colour text, ANSI escape codes are used
+            print(pygame.Color("\033[92;1mGame Over!\nResult: '{}' WINS THE GAME.\033[0m".format(playerOne.getName())))
             pygame.quit()
             sys.exit()
         elif playerTwo.getScore() == 0:
-            print("\033[92mGame Over!\nResult: '{}' WINS THE GAME.\033[0m".format(playerTwo.getName()))
+            print("\033[92;1mGame Over!\nResult: '{}' WINS THE GAME.\033[0m".format(playerTwo.getName()))
             pygame.quit()
             sys.exit()
 
@@ -618,6 +629,7 @@ countdown_off = False
 useroneName_inputfield = textInput(WIDTH * 0.396, HEIGHT * 0.209, 200, 40, button_font)
 usertwoName_inputfield = textInput(WIDTH * 0.396, HEIGHT * 0.417, 200, 40, button_font)
 
+
 # main loop
 while True:
     # event handler
@@ -639,16 +651,16 @@ while True:
                 # draws authentication screen and the returned button details are assigned to the three buttons
                 signin_button, signup_button, skip_button = draw_authentication_screen(screen, title_font, button_font, WIDTH, HEIGHT, LIGHTRED, RED, WHITE, BLACK)
                 if signin_button.collidepoint(event.pos):
-                    '''# test case
-                    print("Sign in button clicked!") '''
+                    # test case
+                    print("Sign in button clicked.") 
                 elif signup_button.collidepoint(event.pos):
-                   ''' # test case
-                    print("Sign up button clicked!")'''
+                    # test case
+                    print("Sign up button clicked.")
                 elif skip_button.collidepoint(event.pos):
                     # current_screen updated so that next iteration actually drawns main menu screen
                     current_screen = "mainMenu"
-                    '''# test case
-                    print("Skip button clicked!")'''
+                    # test case
+                    print("Skip button clicked.")
             # checks if skip button is clicked, if so, draws main menu screen
             elif current_screen == "mainMenu":
                 # draws the main menu screen, using function and assigning returned values to the three buttons
@@ -657,17 +669,18 @@ while True:
                 if back_button.collidepoint(event.pos):
                     current_screen = "authentication"
                     # test case 
-                    print("Back button clicked!")
+                    print("Back button clicked.")
                 elif settings_button.collidepoint(event.pos):
                     # test case
-                    print("Settings button clicked!")
+                    print("Settings button clicked.")
                 elif info_button.collidepoint(event.pos):
                     # test case
-                    print("Info button clicked!")
+                    print("Info button clicked.")
                 elif play_button.collidepoint(event.pos):
                     current_screen = "setup"
                     # test case
-                    print("Play button clicked!")
+                    print("Play button clicked.")
+
             elif current_screen == "setup":
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -677,18 +690,27 @@ while True:
                 screen, title_font, button_font, WIDTH, HEIGHT, RED, WHITE)
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    if submit_button.collidepoint(event.pos):
+                    if submit_button.collidepoint(event.pos):                                                    
                         current_screen = "match"
                         # test case
-                        print("Submit button clicked!")
-                        playerOne.setName(useroneName_inputfield.text)
-                        playerTwo.setName(usertwoName_inputfield.text)
-
+                        print("Submit button clicked.")
+                        if (useroneName_inputfield.validation(useroneName_inputfield.text) and 
+                        usertwoName_inputfield.validation(usertwoName_inputfield.text)):
+                            playerOne.setName(useroneName_inputfield.text)
+                            playerTwo.setName(usertwoName_inputfield.text)
+                        # quits program if invalid input
+                        else:
+                            print("\033[31;1mInvalid input from player one and/or player two.\n" 
+                            "Only enter 8 alphanumeric/non-alphanumeric characters."
+                            "\nRestart game and try again.\033[0m"
+                            )
+                            pygame.quit()
+                            sys.exit()
                     elif back_button.collidepoint(event.pos):
                         current_screen = "mainMenu"
                         # test case
-                        print("Back button clicked!")
-
+                        print("Back button clicked.")
+                
                 # handle input event
                 useroneName_inputfield.handle_event(event)
                 usertwoName_inputfield.handle_event(event)
