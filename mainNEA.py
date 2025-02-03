@@ -238,24 +238,6 @@ class player():
         self.__deck.pop(popIndex)
 
 
-''' once score handling sorted, use this list:
-
-[ # deck set from 1-12 repeating 4 times each for a total of 48 cards
-    1, 1, 1, 1,
-    2, 2, 2, 2,
-    3, 3, 3, 3,
-    4, 4, 4, 4,
-    5, 5, 5, 5,
-    6, 6, 6, 6,
-    7, 7, 7, 7,
-    8, 8, 8, 8,
-    9, 9, 9, 9,
-    10, 10, 10, 10,
-    11, 11, 11, 11,
-    12, 12, 12, 12]
-
-'''
-
 # instantiated player objects
 playerOne = player("Player1", 
 [ 
