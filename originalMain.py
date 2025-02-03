@@ -404,6 +404,7 @@ def game():
     duel_action_player_two = False
     normalflip_action_player_one = False
     normalflip_action_player_two = False
+    # note ADD A CONDITION WHERE IF PLAYER QUITS DURING GAMAE - A CHECK IS DONE TO SEE WHO HAS THE LARGE RSCORE THEN DISPLAYS WHO HAS WON IN THE TERMINAL
     while True:
 
         screen.fill(LIGHTRED)
